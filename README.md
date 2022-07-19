@@ -28,6 +28,7 @@
 
 ## The images of numerical model and failure situation
 
+
 <img width="640" alt="Screenshot 2022-07-19 at 16 32 18" src="https://user-images.githubusercontent.com/103648207/179790656-7f7c2169-d29e-4c29-a2b7-1c672710bdb6.png">
 
 
