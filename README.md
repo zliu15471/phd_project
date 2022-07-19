@@ -6,7 +6,8 @@
 
 The earthquake signal generate by MATLAB:
 
-![image](https://user-images.githubusercontent.com/103648207/179787715-2bf2e3f1-0bff-476e-a32c-d8edf3d5cc8b.png)
+<img width="640" alt="Screenshot 2022-07-19 at 16 30 02" src="https://user-images.githubusercontent.com/103648207/179789802-b02d9cce-c235-41f6-87ea-da038d190439.png">
+
 
 <img width="640" alt="Screenshot 2022-07-19 at 16 23 28" src="https://user-images.githubusercontent.com/103648207/179789411-0acdd095-2f65-46c7-a631-9bc1b576dce0.png">
 
