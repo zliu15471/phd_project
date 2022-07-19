@@ -8,12 +8,11 @@ The earthquake signal generate by MATLAB:
 
 ![image](https://user-images.githubusercontent.com/103648207/179787715-2bf2e3f1-0bff-476e-a32c-d8edf3d5cc8b.png)
 
-<img width="831" alt="Screenshot 2022-07-19 at 16 23 10" src="https://user-images.githubusercontent.com/103648207/179788167-fe17deec-29e2-4e8e-a642-a660ae8d2394.png">
-
-<img width="778" alt="Screenshot 2022-07-19 at 16 23 21" src="https://user-images.githubusercontent.com/103648207/179788191-bd358fa4-4655-4bd3-ae10-b9170e5c23b9.png">
+<img width="640" alt="Screenshot 2022-07-19 at 16 23 28" src="https://user-images.githubusercontent.com/103648207/179789411-0acdd095-2f65-46c7-a631-9bc1b576dce0.png">
 
 
-<img width="795" alt="Screenshot 2022-07-19 at 16 23 28" src="https://user-images.githubusercontent.com/103648207/179788210-bb083d4a-963f-41a7-8aab-b449be813a2b.png">
+<img width="640" alt="Screenshot 2022-07-19 at 16 23 21" src="https://user-images.githubusercontent.com/103648207/179789436-f3c10adc-66eb-4063-b05a-bf0068785936.png">
+
 
 <img width="640" alt="Screenshot 2022-07-19 at 16 23 28" src="https://user-images.githubusercontent.com/103648207/179789141-59b72851-ffa5-444d-b65b-5713d30cfacb.png">
 
