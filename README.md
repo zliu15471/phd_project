@@ -9,7 +9,8 @@
 - Link to thesis :https://ethos.bl.uk/OrderDetails.do?uin=uk.bl.ethos.824177
 
 
-## The earthquake signal generate by MATLAB:
+
+## The earthquake signal generate by MATLAB
 
 <img width="640" alt="Screenshot 2022-07-19 at 16 30 02" src="https://user-images.githubusercontent.com/103648207/179789802-b02d9cce-c235-41f6-87ea-da038d190439.png">
 
@@ -24,7 +25,8 @@
 
 
 
-## The images of numerical model and failure situation:
+
+## The images of numerical model and failure situation
 
 <img width="640" alt="Screenshot 2022-07-19 at 16 32 18" src="https://user-images.githubusercontent.com/103648207/179790656-7f7c2169-d29e-4c29-a2b7-1c672710bdb6.png">
 
