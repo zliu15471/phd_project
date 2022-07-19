@@ -1,8 +1,4 @@
 # Data analysis
-- Document here the project: phd_project
-- Description: Project Description
-- Data Source:
-- Type of analysis:
-
-Please document the project the better you can.
-
+- Focused on seismic analysis of masonry structures with openings; mastered the DEM software 3DEC to develop reliable numerical models by coding; generated artificial earthquake signals using MATLAB.
+- Imported built-in functions in 3DEC by judging the ‘true or false’ of the index of every contact and to retrieve the data to compute the force of structures; obtain all the numerical results through data visualization. 
+- Applied simple linear regression methods using MATLAB to establish the relationship between structural capacity and opening effects.
