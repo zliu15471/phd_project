@@ -14,8 +14,8 @@
 
 <img width="640" alt="Screenshot 2022-07-19 at 16 30 02" src="https://user-images.githubusercontent.com/103648207/179789802-b02d9cce-c235-41f6-87ea-da038d190439.png">
 
+<img width="640" alt="Screenshot 2022-07-19 at 16 23 10" src="https://user-images.githubusercontent.com/103648207/179794526-879adae6-aecf-49de-817a-721bf52c0877.png">
 
-<img width="640" alt="Screenshot 2022-07-19 at 16 23 28" src="https://user-images.githubusercontent.com/103648207/179789411-0acdd095-2f65-46c7-a631-9bc1b576dce0.png">
 
 
 <img width="640" alt="Screenshot 2022-07-19 at 16 23 21" src="https://user-images.githubusercontent.com/103648207/179789436-f3c10adc-66eb-4063-b05a-bf0068785936.png">
@@ -38,4 +38,7 @@
 
 ## The relationship between total percentage (%) width of wall removed for various opening cases and normalised in-plane capacity of URM wall
 
+
 <img width="640" alt="Screenshot 2022-07-19 at 16 50 06" src="https://user-images.githubusercontent.com/103648207/179794234-532b627c-db89-4fe9-b2c5-928d2233eb19.png">
+
+
