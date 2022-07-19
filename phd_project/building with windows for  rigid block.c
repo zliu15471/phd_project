@@ -159,9 +159,6 @@ end
 
 
 
-
-
-
 def series2(inc_sizez)
 new_sizez1 = 0
 new_sizez2 = 0.06
