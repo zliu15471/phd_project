@@ -1,74 +1,46 @@
-# Data analysis
-- Document here the project: phd_project
-- Description: Project Description
-- Data Source:
-- Type of analysis:
+# Seismic analysis of low-rise masonry structures with openings
+- Focused on seismic analysis of masonry structures with openings; mastered the DEM software 3DEC to develop reliable numerical models by coding; generated artificial earthquake signals using MATLAB.
+- Imported built-in functions in 3DEC by judging the ‘true or false’ of the index of every contact and to retrieve the data to compute the force of structures; obtain all the numerical results through data visualization. 
+- Applied simple linear regression methods using MATLAB to establish the relationship between structural capacity and opening effects.
 
-Please document the project the better you can.
 
-# Startup the project
+## Thesis link 
 
-The initial setup.
+- Link to thesis :https://ethos.bl.uk/OrderDetails.do?uin=uk.bl.ethos.824177
 
-Create virtualenv and install the project:
-```bash
-sudo apt-get install virtualenv python-pip python-dev
-deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
-    pip install pip -U; pip install -r requirements.txt
-```
 
-Unittest test:
-```bash
-make clean install test
-```
 
-Check for phd_project in gitlab.com/{group}.
-If your project is not set please add it:
+## The earthquake signal generate by MATLAB
 
-- Create a new project on `gitlab.com/{group}/phd_project`
-- Then populate it:
+<img width="640" alt="Screenshot 2022-07-19 at 16 30 02" src="https://user-images.githubusercontent.com/103648207/179789802-b02d9cce-c235-41f6-87ea-da038d190439.png">
 
-```bash
-##   e.g. if group is "{group}" and project_name is "phd_project"
-git remote add origin git@github.com:{group}/phd_project.git
-git push -u origin master
-git push -u origin --tags
-```
+<img width="640" alt="Screenshot 2022-07-19 at 16 23 10" src="https://user-images.githubusercontent.com/103648207/179794526-879adae6-aecf-49de-817a-721bf52c0877.png">
 
-Functionnal test with a script:
 
-```bash
-cd
-mkdir tmp
-cd tmp
-phd_project-run
-```
 
-# Install
+<img width="640" alt="Screenshot 2022-07-19 at 16 23 21" src="https://user-images.githubusercontent.com/103648207/179789436-f3c10adc-66eb-4063-b05a-bf0068785936.png">
 
-Go to `https://github.com/{group}/phd_project` to see the project, manage issues,
-setup you ssh public key, ...
 
-Create a python3 virtualenv and activate it:
+<img width="640" alt="Screenshot 2022-07-19 at 16 23 28" src="https://user-images.githubusercontent.com/103648207/179789141-59b72851-ffa5-444d-b65b-5713d30cfacb.png">
 
-```bash
-sudo apt-get install virtualenv python-pip python-dev
-deactivate; virtualenv -ppython3 ~/venv ; source ~/venv/bin/activate
-```
 
-Clone the project and install it:
 
-```bash
-git clone git@github.com:{group}/phd_project.git
-cd phd_project
-pip install -r requirements.txt
-make clean install test                # install and test
-```
-Functionnal test with a script:
 
-```bash
-cd
-mkdir tmp
-cd tmp
-phd_project-run
-```
+## The images of numerical model and failure situation
+
+
+<img width="640" alt="Screenshot 2022-07-19 at 16 32 18" src="https://user-images.githubusercontent.com/103648207/179790656-7f7c2169-d29e-4c29-a2b7-1c672710bdb6.png">
+
+<img width="640" alt="Screenshot 2022-07-19 at 16 32 33" src="https://user-images.githubusercontent.com/103648207/179790687-71277348-ecc7-4250-954f-c0b8e855684a.png">
+
+<img width="640" alt="Screenshot 2022-07-19 at 16 32 56" src="https://user-images.githubusercontent.com/103648207/179790713-2757a8d9-08c4-4134-bee3-085ad0943862.png">
+
+
+
+
+## The relationship between total percentage (%) width of wall removed for various opening cases and normalised in-plane capacity of URM wall
+
+
+<img width="640" alt="Screenshot 2022-07-19 at 16 50 06" src="https://user-images.githubusercontent.com/103648207/179794234-532b627c-db89-4fe9-b2c5-928d2233eb19.png">
+
+
