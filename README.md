@@ -15,6 +15,8 @@ The earthquake signal generate by MATLAB:
 
 <img width="795" alt="Screenshot 2022-07-19 at 16 23 28" src="https://user-images.githubusercontent.com/103648207/179788210-bb083d4a-963f-41a7-8aab-b449be813a2b.png">
 
+<img width="640" alt="Screenshot 2022-07-19 at 16 23 28" src="https://user-images.githubusercontent.com/103648207/179789141-59b72851-ffa5-444d-b65b-5713d30cfacb.png">
+
 
 
 The images of numerical model and failure situation:
