@@ -21,8 +21,11 @@ The earthquake signal generate by MATLAB:
 
 The images of numerical model and failure situation:
 
-![image](https://user-images.githubusercontent.com/103648207/179786840-5a5bff74-2eb1-48e2-9ce3-b3eefb6e7fa4.png)
+<img width="640" alt="Screenshot 2022-07-19 at 16 32 18" src="https://user-images.githubusercontent.com/103648207/179790656-7f7c2169-d29e-4c29-a2b7-1c672710bdb6.png">
 
-![image](https://user-images.githubusercontent.com/103648207/179786966-73ae4c5b-8e51-4f2f-90b2-65358a838ca0.png)
 
-![image](https://user-images.githubusercontent.com/103648207/179787183-f6f698ac-cb7c-4852-9e16-a5493fd1a0c2.png)
+<img width="640" alt="Screenshot 2022-07-19 at 16 32 33" src="https://user-images.githubusercontent.com/103648207/179790687-71277348-ecc7-4250-954f-c0b8e855684a.png">
+
+<img width="640" alt="Screenshot 2022-07-19 at 16 32 56" src="https://user-images.githubusercontent.com/103648207/179790713-2757a8d9-08c4-4134-bee3-085ad0943862.png">
+
+
