@@ -4,6 +4,11 @@
 - Applied simple linear regression methods using MATLAB to establish the relationship between structural capacity and opening effects.
 
 
+# Thesis link 
+
+- Link to thesis :https://ethos.bl.uk/OrderDetails.do?uin=uk.bl.ethos.824177
+
+
 The earthquake signal generate by MATLAB:
 
 <img width="640" alt="Screenshot 2022-07-19 at 16 30 02" src="https://user-images.githubusercontent.com/103648207/179789802-b02d9cce-c235-41f6-87ea-da038d190439.png">
