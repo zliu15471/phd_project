@@ -36,3 +36,6 @@
 <img width="640" alt="Screenshot 2022-07-19 at 16 32 56" src="https://user-images.githubusercontent.com/103648207/179790713-2757a8d9-08c4-4134-bee3-085ad0943862.png">
 
 
+## The relationship between total percentage (%) width of wall removed for various opening cases and normalised in-plane capacity of URM wall
+
+<img width="640" alt="Screenshot 2022-07-19 at 16 50 06" src="https://user-images.githubusercontent.com/103648207/179794234-532b627c-db89-4fe9-b2c5-928d2233eb19.png">
