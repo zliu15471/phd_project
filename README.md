@@ -31,7 +31,6 @@
 
 <img width="640" alt="Screenshot 2022-07-19 at 16 32 18" src="https://user-images.githubusercontent.com/103648207/179790656-7f7c2169-d29e-4c29-a2b7-1c672710bdb6.png">
 
-
 <img width="640" alt="Screenshot 2022-07-19 at 16 32 33" src="https://user-images.githubusercontent.com/103648207/179790687-71277348-ecc7-4250-954f-c0b8e855684a.png">
 
 <img width="640" alt="Screenshot 2022-07-19 at 16 32 56" src="https://user-images.githubusercontent.com/103648207/179790713-2757a8d9-08c4-4134-bee3-085ad0943862.png">
