@@ -1,0 +1,1514 @@
+Warning: the font "Times" is not available, so "Lucida Bright" has been substituted, but may have unexpected appearance or behavor. Re-enable the "Times" font to remove this warning.
+Warning: the font "Times" is not available, so "Lucida Bright" has been substituted, but may have unexpected appearance or behavor. Re-enable the "Times" font to remove this warning.
+>> % Response Spectra Matching Version 10 by AJC 25/3/2013
+close all;
+clear all;
+
+disp(['Matching Software Version 10.0 ']);
+
+% next line needed if going for parallel code
+% matlabpool open 2
+
+% ------------------------------------------
+% Setup of spectra
+% defined spectra corner points. Below min frequency spectra will be assumed
+% to be zero. Above max frequency spectra will be assumed to be the accel
+% defined at the highest frequency below (ie. the PGA)
+corner_points= ...
+    [
+100	0.216
+50	0.2484
+25	0.2808
+16.66666667	0.3132
+12.5	0.3456
+10	0.378
+8.333333333	0.4104
+7.142857143	0.4428
+6.25	0.4752
+5.555555556	0.5076
+5	0.54
+4.545454545	0.54
+4.166666667	0.54
+3.846153846	0.54
+3.571428571	0.54
+3.333333333	0.54
+3.125	0.54
+2.941176471	0.54
+2.777777778	0.54
+2.631578947	0.54
+2.5	0.54
+2.380952381	0.54
+2.272727273	0.54
+2.173913043	0.54
+2.083333333	0.54
+2	0.54
+1.923076923	0.54
+1.851851852	0.54
+1.785714286	0.54
+1.724137931	0.54
+1.666666667	0.54
+1.612903226	0.54
+1.5625	0.54
+1.515151515	0.54
+1.470588235	0.54
+1.428571429	0.54
+1.388888889	0.54
+1.351351351	0.54
+1.315789474	0.54
+1.282051282	0.54
+1.25	0.54
+1.219512195	0.5268
+1.19047619	0.5143
+1.162790698	0.5023
+1.136363636	0.4909
+1.111111111	0.48
+1.086956522	0.4696
+1.063829787	0.4596
+1.041666667	0.45
+1.020408163	0.4408
+1	0.432
+0.980392157	0.4235
+0.961538462	0.4154
+0.943396226	0.4075
+0.925925926	0.4
+0.909090909	0.3927
+0.892857143	0.3857
+0.877192982	0.3789
+0.862068966	0.3724
+0.847457627	0.3661
+0.833333333	0.36
+0.819672131	0.3541
+0.806451613	0.3484
+0.793650794	0.3429
+0.78125	0.3375
+0.769230769	0.3323
+0.757575758	0.3273
+0.746268657	0.3224
+0.735294118	0.3176
+0.724637681	0.313
+0.714285714	0.3086
+0.704225352	0.3042
+0.694444444	0.3
+0.684931507	0.2959
+0.675675676	0.2919
+0.666666667	0.288
+0.657894737	0.2842
+0.649350649	0.2805
+0.641025641	0.2769
+0.632911392	0.2734
+0.625	0.27
+0.617283951	0.2667
+0.609756098	0.2634
+0.602409639	0.2602
+0.595238095	0.2571
+0.588235294	0.2541
+0.581395349	0.2512
+0.574712644	0.2483
+0.568181818	0.2455
+0.561797753	0.2427
+0.555555556	0.24
+0.549450549	0.2374
+0.543478261	0.2348
+0.537634409	0.2323
+0.531914894	0.2298
+0.526315789	0.2274
+0.520833333	0.225
+0.515463918	0.2227
+0.510204082	0.2204
+0.505050505	0.2182
+0.5	0.216
+0.495049505	0.2117
+0.490196078	0.2076
+0.485436893	0.2036
+0.480769231	0.1997
+0.476190476	0.1959
+0.471698113	0.1922
+0.46728972	0.1887
+0.462962963	0.1852
+0.458715596	0.1818
+0.454545455	0.1785
+0.45045045	0.1753
+0.446428571	0.1722
+0.442477876	0.1692
+0.438596491	0.1662
+0.434782609	0.1633
+0.431034483	0.1605
+0.427350427	0.1578
+0.423728814	0.1551
+0.420168067	0.1525
+0.416666667	0.15
+0.41322314	0.1475
+0.409836066	0.1451
+0.406504065	0.1428
+0.403225806	0.1405
+0.4	0.1382
+0.396825397	0.1361
+0.393700787	0.1339
+0.390625	0.1318
+0.387596899	0.1298
+0.384615385	0.1278
+0.381679389	0.1259
+0.378787879	0.124
+0.37593985	0.1221
+0.373134328	0.1203
+0.37037037	0.1185
+0.367647059	0.1168
+0.364963504	0.1151
+0.362318841	0.1134
+0.35971223	0.1118
+0.357142857	0.1102
+0.354609929	0.1086
+0.352112676	0.1071
+0.34965035	0.1056
+0.347222222	0.1042
+0.344827586	0.1027
+0.342465753	0.1013
+0.340136054	0.1
+0.337837838	0.0986
+0.33557047	0.0973
+0.333333333	0.096
+0.331125828	0.0947
+0.328947368	0.0935
+0.326797386	0.0923
+0.324675325	0.0911
+0.322580645	0.0899
+0.320512821	0.0888
+0.318471338	0.0876
+0.316455696	0.0865
+0.314465409	0.0854
+0.3125	0.0844
+0.310559006	0.0833
+0.308641975	0.0823
+0.306748466	0.0813
+0.304878049	0.0803
+0.303030303	0.0793
+0.301204819	0.0784
+0.299401198	0.0774
+0.297619048	0.0765
+0.295857988	0.0756
+0.294117647	0.0747
+0.292397661	0.0739
+0.290697674	0.073
+0.289017341	0.0722
+0.287356322	0.0713
+0.285714286	0.0705
+0.284090909	0.0697
+0.282485876	0.0689
+0.280898876	0.0682
+0.279329609	0.0674
+0.277777778	0.0667
+0.276243094	0.0659
+0.274725275	0.0652
+0.273224044	0.0645
+0.27173913	0.0638
+0.27027027	0.0631
+0.268817204	0.0624
+0.267379679	0.0618
+0.265957447	0.0611
+0.264550265	0.0605
+0.263157895	0.0598
+0.261780105	0.0592
+0.260416667	0.0586
+0.259067358	0.058
+0.257731959	0.0574
+0.256410256	0.0568
+0.255102041	0.0562
+0.253807107	0.0557
+0.252525253	0.0551
+0.251256281	0.0545
+0.25	0.054
+
+
+    ];
+
+% spectra defined on linear or log plot
+% set = 1 for log plot on relevant axis
+defined_log_x=1;
+defined_log_y=0;
+
+% Manual extra frequency points to show on RRS calc
+% if these freqs are within the corner points defined then the spectra
+% values will be interpolated to get the required values at these
+% locations. If outside then required spectra assumed to be zero (low freqs) or PGA (high freqs) and actual
+% value will just be calcuated and shown on plot for information
+% if values are outside fft freq range they will just be ignored
+extra_freqs= ...
+    [];
+
+% defined damping value as %
+damping = 5;
+
+% EXTRA FREQUENCIES
+% Note that these will only created between the max and min freqency values
+% defined by corner points.
+
+% definition of linear frequency points setup between max/min corner point freqs
+% set linear frequency interval in Hz. Set step to 0 for no extra points
+% points will be defined as lin_offset + lin_step * [0....n]
+lin_step = 0;
+% Set offset (Hz) to none zero value if an offset to the frequency points is
+% needed
+lin_offset = 0;
+
+% definition of log frequency points setup between max/min corner point freqs
+% set octave frequency interval as ratio. Set ratio to 0 for no extra points
+% points will be defined as 2^([0...n]+ln(log_offset))
+log_ratio = 1/24;
+% Set offset to something other than 1 if an offset to the frequency points is
+% needed. Points normally include 1 Hz but setting a different value (Hz) here
+% will move the curve to go through this point.
+log_offset = 1;
+
+% frequency range between which to match the spectra in Hz
+% any ranges outside those defined by the corner points will be clipped /
+% ignored. Define as pairs of from-to values
+match_ranges= ...
+    [
+  % .45 40
+   .25 100
+    ];
+
+% taper length from 1 to zero in octaves at edges or matching_ranges ie. if corner frequency is 10 and
+% tap_len=1/2 then the taper to zero will finish at 15Hz. This effectvely
+% defined the order of the "crude" filter.
+tap_len=1/6;
+
+% Definition of acceptable errors for matching at each frequency point
+% set target_by = 0 to define bands from mid point and error
+% set target_by = 1 to define acceptance bands independantly
+target_by=0;
+
+% define target spectra taking into account calibration errors
+% spectra value X is modified to Y = target_mult * X + target_shift
+target_mult=1;
+target_shift=0;
+
+% acceptable errors from target spectral values
+% each target spectra value X is modified to get errror band
+% Upper band = error_mult * X + error_shift
+% Lower band = X / error_mult - error_shift
+% matching less likely to work well if error_shift <> 0, if assymetric banding wanted
+% do this by adjusting the target and then using symmetrical error on that.
+error_mult=1.02;
+error_shift=0;
+
+% manual definition of acceptable error bands - no checks done on
+% overlapping or correct way round!!!!!
+% only used if target_by > 0 and used to generate new values of target_mult
+% error_mult etc.
+% both based on band = mult * X + shift
+accept_bandu_mult=1.1;
+accept_bandu_shift=0.02;
+accept_bandl_mult=1.05;
+accept_bandl_shift=0.02;
+
+% table limits (peak values mm, m/s, g) for disp this is 50% of the stroke
+max_disp = 1500;
+max_vel = 5;
+max_accel = 5.0;
+
+% How to define best motions
+% opt_define_best=0 searches for fewest points under enveloped, fewest
+% points over enveloped, then minimum motion
+% opt_define_best=1 searches for fewest points below then minimum motion
+% (i.e. does not care about over-enveloping)
+opt_define_best=0;
+
+% Set opt_non_zero_centre=1 to allow non zero centre position for table
+% (more efficient but harder to do on table). Leave opt_non_zero_centre=0
+% for standard centering of table.
+opt_non_zero_centre=0;
+
+% optional peak clipping of each time history
+% set opt_peak_clip < 1 to do displacmeent peak clip of each matched time history
+% peak clipping will continue till clipping ratio defined by opt_peak_clip
+% is achieved or untill the matching goes outside the tollerance bands
+% defined above (assuming it was above min error band at end of match)
+% e.g. if opt_peak_clip=0.8 all excursions > 80% of the max displacment are
+% clipped to 80% of the maximum value (assuming spectra still remains within
+% tollerance)
+opt_peak_clip=1;
+
+% plot spectra values on log or linear axes
+% set = 1 for log plot on relevant axis
+plotspectra_log_x=1;
+plotspectra_log_y=0;
+
+% optional analysis at end on best time histories
+% these analyses take quite a long time !!
+% set opt_spectrogtram = 1 to do a spectrogram plot for each of the best time histories
+% set opt_peakcount = 1 to do peak count plot for each of the best time histories
+% set opt_eqparam = 1 to calc various strong motion parameters for each of the best time
+% histories
+opt_spectrogtram=0;
+opt_peakcount=0;
+opt_eqparam=0;
+
+% ------------------------------------------
+% Setup of time history
+% Note that time history will be a displacement and the velocity and accels
+% will be calculated from it
+
+% length of strong motion (secs)
+hist_strong=15;
+% length of rise time (secs)
+hist_rise=2;
+% length of fall time (secs)
+hist_fall=3;
+% length of pause at start and end of record (secs)
+hist_pause=1;
+% Envelope type
+% linear ramps =1
+% haversine ramps =2
+% no envelope =3
+env_type=2;
+
+% frequency of derived time history (Hz) needs to be [over_sample] times max freq of
+% interest. must be at least 2 to deal with nyquist freq.
+hist_freq=200;
+
+% way to start matching process - note time history created as a
+% displacememt
+% random numbers =1
+% gausian white noise =2
+% pseudo repeatable random number =3
+% sine wave=4 use only for testing
+start_with=1;
+
+% Number of time histories to generate and compare
+num_ths=3;
+
+% plot time histories and spectra every "how many" steps
+% takes quite a long time so if in doubt use same value as num_cals
+plot_step=50;
+
+% plot factors every "how many" steps
+% takes quite a long time so if in doubt use same value as num_cals
+plot_factors=50;
+
+% Number of matching iterations / time history
+num_cals=200;
+
+% set min_lim=1 to minimise table displacement, =2 to minimise velocity and
+% =3 to minimise accels
+min_lim=1;
+
+% number of axes to get results for. The best [num_axes] time histories from
+% the total suite generated will be picked.
+num_axes=10;
+
+% ===================================================================
+% Values below not intended to be changed by user
+% number of decimal places to round frequencies to. Avoid problems with log calcs
+% giving 31.999999 not being equal to 32
+dec_precision=0.0001;
+% if matching outside matching range set fft factor to this value (should
+% be close to zero
+zero_fact=0;
+% spectra values below min freq defined by corner points set to this value
+zero_spec=0.0;
+% over sample multiplier from specta to time history sample rate
+% if spectra defined to 50Hz an over_sample value of 6 requires the time history smaple
+% rate to be a minimum of 200Hz
+% minimum value of 10 is recommended by Brandt et al in "A DIGITAL FILTER
+% METHOD FOR FORCED RESPONSE COMPUTATION" p6
+% testing by AJC suggests 20 is better!
+over_sample=10;
+% window function to be used for peak clipping
+% peak_clip_method = 1 uses square window (results in accel spikes at ends)
+% peak_clip_method = 2 uses sine pulse
+peak_clip_method=2;
+% adjustment speed for fft modification =1 for use factor as is. <1 to use
+% portion of factor only.
+adjust_fact=1;
+% set add_fft_freqs > 0 to add all the fft frequencies into the matching
+% process - does produce a better answer but takes significanty longer.
+% add_fft_freqs = 1 adds every point, add_fft_freqs = 2 adds every 2nd
+% point etc. If add_fft_range > 0 then add over full freq range otherwise
+% limit to within [match_ranges] with cuttoff of add_fft_limit to include
+% tapers
+add_fft_freqs=0;
+add_fft_range=0;
+add_fft_limit=0.5;
+% exclude [dump_match] initial matches when looking for best matches
+% first few iterations can look good because every point is above target but
+% in reality they also have very high frequency content. If disp time
+% histories look like acceleration records increase this number
+dump_match=20;
+% limit for warning that matching not continued for long enough. number
+% between 0 and 1
+best_limit=.8;
+% set plot_iter_fft = 1 to calc full fft at end of every iteration
+% useful for debugging
+plot_iter_fft=0;
+% ===================================================================
+% No user editable stuff below here
+% ===================================================================
+
+disp(['Analysis started ' datestr(now)]);
+
+% create figure handle
+results=figure('PaperSize',[20.98 29.68]);
+
+% start building a single array of all frequencies to do spectra checks at (and their types)
+% values are rounded to [dec_precision] to cope with cut and paste values from
+% other code being something like 2.00000000001
+freqs1(:,1)=round(corner_points(:,1)/dec_precision)*dec_precision;
+freqs1(:,2)=ones(length(freqs1(:,1)),1);
+
+% get min and max of frequencies defined by corner points
+% other linear or log freqs will only be defined between these values
+%***************************
+minfreq=min(freqs1(:,1));
+maxfreq=max(freqs1(:,1));
+
+% DO SOME CHECKS
+% time history frequency must be > [over_sample] times max spectra frequency of
+% interest
+% check if time history has a high enough sample rate to cope with the
+% frequencies required in the spectra defined by corner points
+if hist_freq < over_sample* maxfreq
+    disp(['Time history frequency must be > ' num2str(over_sample) ' times max spectra frequency (' num2str(maxfreq) 'Hz)']);
+    new_hist_freq = ceil(over_sample* maxfreq);
+    disp(['Time history frequency has been adjusted from ' num2str(hist_freq) 'Hz to ' num2str(new_hist_freq) 'Hz' ]);
+    hist_freq=new_hist_freq;
+end
+% check doing more matches than will be dumped
+if dump_match > num_cals
+    disp(['Increasing number of iterations from ' num2str(num_cals) ' to ' num2str(num_cals+1) ' to cope with dumped iterations' ]);
+    num_cals=dump_match+1;
+end
+% check number time histores to cal > number of axes required
+if num_axes > num_ths
+    disp(['Increasing number of time histories from ' num2str(num_ths) ' to ' num2str(num_axes) ' to cope with number of axes required' ]);
+    num_ths=num_axes;
+end
+% check number plot <= number of iteration required
+if plot_step> num_cals
+    plot_step= num_cals;
+end
+if plot_factors> num_cals
+    plot_factors= num_cals;
+end
+
+% work out fft frequencies
+hist_length=hist_pause+hist_rise+hist_strong+hist_fall+hist_pause;
+hist(:,1)=0:1/hist_freq:hist_length;
+L=length(hist(:,1));
+NFFT = 2^nextpow2(L); % Next power of 2 from length of y
+f = hist_freq/2*linspace(0,1,NFFT/2);
+
+% create matching range vector equivalent to FFT values based on data in match_ranges
+% This vector will be multipled by the spectra to get matching only over
+% certain frequency ranges.
+% the values in matchingrange get used as a multiplyer on the factors later
+matchingrange = zeros(1,length(f));
+for i=1:length(matchingrange)
+    for j=1:length(match_ranges(:,1))
+        if and(f(i)>match_ranges(j,1),f(i)<match_ranges(j,2))
+            matchingrange(i)=1;
+        end
+    end
+end
+% keep a copy of matchingrange without filters to help with plotting
+% factors later
+plot_factors_range=matchingrange;
+
+% need to smooth corners of matching to avoid sudden steps in spectra from 1 to
+% zero - ie. add in a crude filter, if filter overlaps existing stuff take
+% max of existing and filter value.
+delta_freq=f(2);
+if tap_len>0
+    for i=2:length(matchingrange)-1
+        if and(matchingrange(i)==1,matchingrange(i+1)==0);
+            % right down taper
+            taper_no=ceil(f(i)*tap_len/delta_freq);
+            matchingrange(i:i+taper_no)=max(matchingrange(i:i+taper_no),(1:-1/taper_no:0));
+            %    matchingrange(i:i+taper_no)=1:-1/taper_no:0;
+        end
+        if and(matchingrange(i)==1,matchingrange(i-1)==0);
+            % left down taper
+            taper_no=ceil(f(i)*tap_len/delta_freq);
+            matchingrange(i-taper_no:i)=max(matchingrange(i-taper_no:i),(0:1/taper_no:1));
+            %  matchingrange(i-taper_no:i)=0:1/taper_no:1 ;
+        end
+
+    end
+end
+
+% check there are some extra freqs defined. If not create one which is a
+% copy of a corner freq this will get ignored later but need something in
+% this list to make the spectra setup properly
+if isempty(extra_freqs)
+    extra_freqs(1)=corner_points(1,1);
+end
+
+% go through extra freqs and check each is lower than the fft freq range
+% before adding it
+count=1;
+for i=1:length(extra_freqs);
+    if extra_freqs(i)<=max(f)
+        freqs2(count,1)=extra_freqs(i);
+        count=count+1;
+    end
+end
+freqs2(:,2)=2*ones(length(freqs2(:,1)),1);
+
+freqtmp=[];
+% ****************************************
+% actual fft precision is based on freq step of hist_freq/NFFT
+if add_fft_freqs >0
+    % add in every [add_fft_freqs] of the fft frequency points
+    % these get added to the freqs3 list as linear frequency points
+    freqtmp = f(1:ceil(add_fft_freqs):length(f))';
+    if add_fft_range==0
+        % eliminate those fft frequency points not
+        % within the matching range defined by matchingrange and above
+        % add_fft_limit
+        freqtmp=freqtmp(and(matchingrange > add_fft_limit,1));
+    end
+end
+
+if lin_step > 0
+    % generate linear frequency points within range defined by corner
+    % points
+    for i = lin_offset : lin_step: maxfreq
+        if i > minfreq
+            freqtmp=vertcat(freqtmp,i);
+        end
+    end
+end
+if not(isempty(freqtmp));
+    freqs3(:,1)=freqtmp;
+    freqs3(:,2)=3*ones(length(freqtmp),1);
+else
+    freqs3=[];
+end
+
+if log_ratio > 0
+    % generate log frequency points within range defined by corner points
+    freqtmp=[];
+    for i = (log2(minfreq)-mod(log2(minfreq),log_ratio)) : log_ratio: log2(maxfreq)
+        new_f=pow2(i+log2(log_offset));
+        if new_f > minfreq
+            freqtmp=vertcat(freqtmp,new_f);
+        end
+    end
+    freqs4(:,1)=freqtmp;
+    freqs4(:,2)=4*ones(length(freqtmp),1);
+else
+    freqs4=[];
+end
+
+% collect all the frequency values
+collected_rowdata=sortrows(vertcat(freqs1,freqs2,freqs3,freqs4));
+% This line rounds all the frequencies to [dec_precision] to
+% avoid having frequencies like 31.999999999 and 32
+collected_rowdata(:,1)=round(collected_rowdata(:,1)/dec_precision)*dec_precision;
+% Sort and then just get unique values
+sorted_rowdata=sortrows(collected_rowdata);
+[c,d,e]=unique(sorted_rowdata(:,1),'first');
+specpoints=sorted_rowdata(d,:);
+
+% specpoint(:,1) = spectral freq points
+% specpoint(:,2) = source of frequency point
+% specpoint(:,3) = interpolated spectra values
+% specpoint(:,4) = target spectral values
+% specpoint(:,5) = upper limit value
+% specpoint(:,6) = lower limit value
+% specpoint(:,7) = calculated spectral values from hist(:,6)
+% specpoint(:,8) = spectral ratios i.e. ([4] / [7])
+% specpoint(:,9) = 1 if frequency is within matching_range for error checking
+
+% interpolate spectra defined by corner points onto all freqs required for
+% matching
+% what type of interpolation to do
+if (and(defined_log_x==0,defined_log_y==0))
+    % linear interpolation of spectra
+    specpoints(:,3)=interp1(corner_points(:,1),corner_points(:,2),specpoints(:,1),'linear','extrap');
+elseif (and(defined_log_x==1,defined_log_y==0))
+    % log x interpolation of spectra
+    specpoints(:,3)=interp1(log2(corner_points(:,1)),corner_points(:,2),log2(specpoints(:,1)),'linear','extrap');
+elseif (and(defined_log_x==0,defined_log_y==1))
+    % log y interpolation of spectra
+    specpoints(:,3)=pow2(interp1(corner_points(:,1),log2(corner_points(:,2)),specpoints(:,1),'linear','extrap'));
+else
+    % log log interpolation of spectra
+    specpoints(:,3)=pow2(interp1(log2(corner_points(:,1)),log2(corner_points(:,2)),log2(specpoints(:,1)),'linear','extrap'));
+end
+
+% define target values
+if target_by==0
+    specpoints(:,4)=target_mult.*specpoints(:,3) + target_shift;
+    % define upper limit values
+    specpoints(:,5)=error_mult.*specpoints(:,4) + error_shift;
+    % define lower limit values
+    specpoints(:,6)=specpoints(:,4)./error_mult - error_shift;
+else
+    % define upper limit values
+    specpoints(:,5)=accept_bandu_mult.*specpoints(:,3) + accept_bandu_shift;
+    % define lower limit values
+    specpoints(:,6)=accept_bandl_mult.*specpoints(:,3) + accept_bandl_shift;
+    % target is half way between error bands
+    specpoints(:,4)=(specpoints(:,5)+specpoints(:,6))/2;
+end
+
+% loop through and set target spectra values to zero for any manually defined low freq points outside range defined by corner points
+% set target spectra values to max value defined by highest corner point (zpa value) for any manually defined high freq
+% points outside range defined by corner points
+% where the spectra is outside match_ranges it will be tapered to zero
+% later
+zpa=corner_points(length(corner_points),2);
+lower_check_point=0;
+for i=1:length(specpoints(:,3))
+    if specpoints(i,1)<minfreq
+        specpoints(i,3)=zero_spec;
+        specpoints(i,4)=zero_spec;
+        specpoints(i,5)=zero_spec;
+        specpoints(i,6)=zero_spec;
+    end
+    if specpoints(i,1)>maxfreq
+        specpoints(i,3)=zpa;
+        specpoints(i,4)=target_mult.*zpa + target_shift;
+        specpoints(i,5)=error_mult.*specpoints(i,4) + error_shift;
+        specpoints(i,6)=specpoints(i,4)./error_mult - error_shift;
+    end
+end
+
+max_spec_freq=max(specpoints(:,1));
+min_spec_freq=min(specpoints(:,1));
+
+
+% add column to show which sectra points are within matching ranges defined
+% used to test how good match is
+for i=1:length(specpoints(:,1))
+    for j=1:length(match_ranges(:,1))
+        if and(specpoints(i,1)>=match_ranges(j,1),specpoints(i,1)<=match_ranges(j,2))
+            specpoints(i,9)=1;
+        end
+    end
+end
+
+% total time history length
+hist_length=hist_pause+hist_rise+hist_strong+hist_fall+hist_pause;
+
+% hist(:,1) = time
+% hist(:,2) = displacment e.g. initial white noise at step 1
+% hist(:,3) = differenciate enveloped [2] to get velocity
+% hist(:,4) = differenciate [3] to get enveloped acceleration
+% hist(:,5) = envelope
+% hist(:,6) = enveloped acceleration = [4] : spectra calced from this
+% hist(:,7) = updated displacment using FFT factors - finally fed back to [2] for next step
+% hist(:,8) = enveloped updated disps
+
+% generate initial time history info (time, envelope, data)
+hist(:,1)=0:1/hist_freq:hist_length;
+
+if env_type==1
+    % create linear envelope
+    envelope_points= [ 0 0
+        hist_pause 0
+        hist_pause+hist_rise 1
+        hist_pause+hist_rise+hist_strong 1
+        hist_pause+hist_rise+hist_strong+hist_fall 0
+        hist_length 0];
+    % interpolate envelope
+    hist(:,5)=interp1(envelope_points(:,1),envelope_points(:,2),hist(:,1),'linear','extrap');
+elseif env_type==2
+    % create haversine envelope
+    hist(:,5)=ones(length(hist),1);
+    hist(1:hist_pause*hist_freq,5)=0;
+    for i = round(hist_pause*hist_freq+1) : round((hist_pause+hist_rise)*hist_freq)
+        j=(i-(hist_pause*hist_freq+1))/(hist_rise*hist_freq)*pi;
+        hist(i,5)=(1-cos(j))/2;
+    end
+    for i= round((hist_pause+hist_rise+hist_strong)*hist_freq+2) : round((hist_pause+hist_rise+hist_strong+hist_fall)*hist_freq+2)
+        j=(i-(hist_pause+hist_rise+hist_strong)*hist_freq+2)/(hist_fall*hist_freq)*pi;
+        hist(i,5)=(1+cos(j))/2;
+    end
+    hist(round((hist_pause+hist_rise+hist_strong+hist_fall)*hist_freq+2:length(hist)),5)=0;
+else
+    % no envelope
+    hist(:,5)=ones(length(hist),1);
+    hist(1:(hist_pause+hist_rise)*hist_freq,5)=0;
+    hist((hist_pause+hist_rise+hist_strong)*hist_freq+2:length(hist),5)=0;
+end
+
+% predefine arrays
+best_disps(length(hist(:,1)),1:num_ths)=0;
+error(1:num_cals)=0;
+points_ok(1:num_cals,1:2)=0;
+damp_value=damping/100;
+t_history(length(hist(:,1)),1:num_cals)=0;
+best_perf(1,1:num_ths)=0;
+
+
+% Reset random stream to allow repeatable white noise which is useful
+% for testing and debugging. Only used to generate type 3 starting time
+% histories. Generally this stream is overwritten with clock based data
+% to get proper random data
+stream=RandStream('mrg32k3a');
+
+tic;
+% number of iterations to average time over to get estimated finish time
+num_average_iters=2;
+% match num_ths time histories
+for k = 1:num_ths
+    % bring figure to top
+    %   figure(results);
+    if start_with==1
+        % create random number stream based on clock
+        stream=RandStream('mt19937ar','seed',sum(100*clock));
+        % generate white noise displacements
+        hist(:,2)=rand(stream,1,length(hist(:,1)),1)-0.5;
+    elseif start_with==2
+        % gaussian white noise
+        % hist(:,2)=wgn(length(hist(:,1)),1,0);
+        hist(:,2)=wgn(length(hist(:,1)),1,0,1,round(sum(clock*100)));
+    elseif start_with==3
+        % repeatable white noise useful for testing
+        % and creates repeatable data to allow debugging etc.
+        hist(:,2)=rand(stream,1,length(hist(:,1)),1)-0.5;
+    else
+        % sine wave
+        % only good for testing
+        hist(:,2)=sin(hist(:,1)*hist_length);
+    end
+
+    % num_cals matching iteration of 1 time history
+    for j=1:num_cals
+        figure(results);
+        % plot enveloped disp time history before it is adjusted
+        if j/plot_step == round(j/plot_step)
+            subplot(4,2,1);
+            plot (real(hist(:,1)),real(hist(:,2).*hist(:,5)));
+            hold on;
+            title(['Displacement Time History at step ' num2str(j)]);
+            xlabel('Time (secs)');
+            ylabel('Displacement (m)');
+        end
+
+        % differentiate enveloped disp to get velocities and accelerations
+        % pad with zeros to get lengths the same after differentiation
+        hist(:,3)=vertcat(diff(hist(:,2).*hist(:,5))*hist_freq,0);
+        hist(:,4)=vertcat(diff(hist(:,3))*hist_freq/9.81,0);
+
+        % plot vel time history
+        if j/plot_step == round(j/plot_step)
+            subplot(4,2,3);
+            plot (real(hist(:,1)),real(hist(:,3)));
+            title(['Velocity Time History at step ' num2str(j)]);
+            xlabel('Time (secs)');
+            ylabel('Velocity (m/s)');
+        end
+        % plot accel time history
+        if j/plot_step == round(j/plot_step)
+            subplot(4,2,5);
+            plot (real(hist(:,1)),real(hist(:,4)));
+            title(['Acceleration Time History at step ' num2str(j)]);
+            xlabel('Time (secs)');
+            ylabel('Acceleration (g)');
+        end
+
+
+        % setup enevloped accleration
+        hist(:,6)= hist(:,4);
+
+        % DO MATCHING
+        % calc current spectra
+        specpoints(:,7)=Spectra2multi(hist(:,6),damp_value,1/hist_freq,specpoints(:,1));
+
+        % calc ratios for multiplying fft by to improve match
+        specpoints(:,8)=specpoints(:,4)./specpoints(:,7);
+
+        % FFT calculated on unenveloped displacement data to avoid problems with multiple
+        % enveloping
+        Y = fft(hist(:,2),NFFT)/L;
+
+        % update FFT amplitudes
+        factors=interp1(specpoints(:,1),specpoints(:,8),f,'spline','extrap');
+
+        %    forgetting factors
+        factors=factors.*adjust_fact+1-adjust_fact;
+
+        % adjust according to matching ranges
+        factors=factors.*matchingrange;
+
+        % plot factors
+        subplot(4,2,6);
+        %  figure(fig_fact);
+        if j/plot_factors == round(j/plot_factors)
+            if (plotspectra_log_x==1)
+                % log x plot
+                plot_type='semilogx';
+            else
+                plot_type='plot';
+            end
+            eval([plot_type '(f,1./(factors.*plot_factors_range));']);
+            if (plotspectra_log_x==1)
+                xlim([0.1 max(f)])
+            else
+                xlim([0 max(f)]);
+            end
+            ylim([.8 1.2]);
+            title(['Ratio actual to target spectra values at step ' num2str(j)]);
+            xlabel('Frequency (Hz)');
+            ylabel('Ratio');
+        end
+
+        % calc errors only within frequency ranges being matched
+        % calc RMS error at this step
+        points_ok(j,1:4)=0;
+        % calc num points above and below threasholds at this step within
+        % matching range and get RMS for those points out of range
+
+        for i_err=1 : length(specpoints(:,1))
+            if specpoints(i_err,9)==1
+                % calc number of points below allowable threashold
+                if specpoints(i_err,7)<specpoints(i_err,6)
+                    points_ok(j,1)=points_ok(j,1)+1;
+                    % accumulate RMS error for points out of range
+                    points_ok(j,3)=points_ok(j,3)+(((specpoints(i_err,8)-1)^2).^0.5);
+                    % accumulate peak error for points below range
+                    if (((specpoints(i_err,8)-1)^2).^0.5) > points_ok(j,4)
+                    points_ok(j,4)=(((specpoints(i_err,8)-1)^2).^0.5);
+                    end
+                end
+                % calc number of points above allowable threashold
+                if specpoints(i_err,7)>specpoints(i_err,5)
+                    points_ok(j,2)=points_ok(j,2)+1;
+                    % accumulate RMS error for points out of range
+                    points_ok(j,3)=points_ok(j,3)+(((specpoints(i_err,8)-1)^2).^0.5);
+                end
+            end
+        end
+        % convert to average error/point out of range.
+        if (points_ok(j,1)+points_ok(j,2)) ~=0
+            points_ok(j,3)=points_ok(j,3)/(points_ok(j,1)+points_ok(j,2));
+        end
+
+        factors=[factors 0 fliplr(factors(2:length(factors)))];
+
+        Y=Y.*factors';
+        new_hist=ifft(Y)*L;
+        hist(:,7)=real(new_hist(1:length(hist(:,2))));
+        % multiply updated disps by envelope
+        hist(:,8)= hist(:,7).*hist(:,5);
+        % plot updated time history
+        if j/plot_step == round(j/plot_step)
+            subplot(4,2,1);
+            plot (real(hist(:,1)),real(hist(:,8)),'r');
+            hold off;
+        end
+
+        % Store unmodified history for recall later if it is a good one.
+        t_history(:,j)=hist(:,2);
+        % put new history into initial history slot ready for repeat
+        hist(:,2)=hist(:,7);
+
+        if j/plot_step == round(j/plot_step)
+            subplot(4,2,[2 4]);
+            % plot results of matching
+            % linear plot
+            if (and(plotspectra_log_x==0,plotspectra_log_y==0))
+                plot_type='plot';
+            elseif (and(plotspectra_log_x==1,plotspectra_log_y==0))
+                % log x plot
+                plot_type='semilogx';
+            elseif (and(plotspectra_log_x==0,plotspectra_log_y==1))
+                % log y plot
+                plot_type='semilogy';
+            else
+                % loglog plot
+                plot_type='loglog';
+            end
+
+            % new figure
+            plot_linesfrom=find(specpoints(:,1)==minfreq);
+            plot_linesto=find(specpoints(:,1)==maxfreq);
+
+            eval([plot_type '(specpoints(plot_linesfrom:plot_linesto,1),specpoints(plot_linesfrom:plot_linesto,3),''k'');'])
+            hold on
+            eval([plot_type '(specpoints(plot_linesfrom:plot_linesto,1),specpoints(plot_linesfrom:plot_linesto,4),''g'');']);
+            eval([plot_type '(specpoints(plot_linesfrom:plot_linesto,1),specpoints(plot_linesfrom:plot_linesto,5),''r'');']);
+            eval([plot_type '(specpoints(plot_linesfrom:plot_linesto,1),specpoints(plot_linesfrom:plot_linesto,6),''r'');']);
+            eval([plot_type '(specpoints(:,1),specpoints(:,7),''m'');']);
+
+            % add markers for each point depending how they were generated
+            for i= 1: length(specpoints(:,3))
+                if specpoints(i,2)==1
+                    eval([plot_type '(specpoints(i,1),specpoints(i,3),''^'');']);
+                elseif specpoints(i,2)==2
+                    eval([plot_type '(specpoints(i,1),specpoints(i,3),''v'');']);
+                elseif specpoints(i,2)==3
+                    eval([plot_type '(specpoints(i,1),specpoints(i,3),''x'');']);
+                else
+                    eval([plot_type '(specpoints(i,1),specpoints(i,3),''o'');']);
+                end
+            end
+
+            title('Spectra Matching');
+            xlabel('Frequency (Hz)');
+            ylabel('Spectral Acceleration (g)');
+            % Create textbox
+            %      annotation('textbox',[0.7206 0.8085 0.1705 0.09146],...
+            %          'String',{'\Delta Defined spectra points','\nabla Extra frequency points','\times Linear Interpolated points','\o Log Interpolated points'},...
+            %          'FitBoxToText','on');
+            hold off;
+        end
+    end
+
+    if plot_iter_fft == 1
+        hold on;
+        % spectra over full fft range
+        full_spec=Spectra2multi(hist(:,6),damp_value,1/hist_freq,f);
+        plot(f,full_spec,'k');
+        hold off;
+    end
+
+    % find best match in this set of data
+    if opt_define_best>0
+        % look for TH with fewest poinst below threashold and then least
+        % error - don't worry about points over threshold
+        [ordered_match,match_index]=sortrows(points_ok(dump_match+1:length(points_ok),:),[1 3]);
+    else
+        % look for best match i.e minimum number of points above and below
+        % threasholds
+        [ordered_match,match_index]=sortrows(points_ok(dump_match+1:length(points_ok),:),[1 2 3]);
+    end
+    best_match= match_index(1)+dump_match;
+
+    % best_perf(1,:) = time history number
+    % best_perf(2,:) = iteration number the was best
+    % best_perf(3,:) = average error for points out of range
+    % best_perf(4,:) = number points below threashold
+    % best_perf(5,:) = number points above threashold
+    % best_perf(6,:) = peak positive displacement for time hist
+    % best_perf(7,:) = peak negative displacement for time hist
+    % best_perf(8,:) = peak positive velocity for time hist
+    % best_perf(9,:) = peak negative velocity for time hist
+    % best_perf(10,:) = peak positive acceleration for time hist
+    % best_perf(11,:) = peak positive acceleration for time hist
+    % best_perf(12,:) = peak to peak displacement if opt_non_zero_centre=1
+    % best_perf(12,:) = 2 x peak displacement if opt_non_zero_centre=0
+    % best_perf(13,:) = peak velocity
+    % best_perf(14,:) = peak displacement
+    % best_perf(15,:) = 1 if within table displacement limits
+    % best_perf(16,:) = 1 if within table velocity limits
+    % best_perf(17,:) = 1 if within table acceleration limits
+    % best_perf(18,:) = sum of rows 15,16,17 i.e. = 3 if disps, vels, accels all OK
+    % best_perf(19,:) = displacement clipping value achieved
+    % best_perf(20,:) = original number points below threashold before any amplitude scaling
+
+    best_disps(:,k)=real(t_history(:,best_match)).*hist(:,5);
+    best_perf(1,k)=k;
+    best_perf(2,k)=best_match;
+    best_perf(3,k)=points_ok(best_match,3);
+    best_perf(4,k)=points_ok(best_match,1);
+    best_perf(5,k)=points_ok(best_match,2);
+    best_perf(20,k)=best_perf(4,k);
+
+    if opt_define_best==2
+        % Do scaling of best timehistory to eliminate underenveloping
+        % Only scale if original match had points below threashold
+        if best_perf(4,k) > 0
+
+        end
+    end
+
+
+    % has the peak clipping option been enabled - if so do clipping
+    if opt_peak_clip < 1
+        % only clip if original match had every point above minimum
+        % threashold
+        if best_perf(4,k) == 0
+            % test in 0.5% (aprox 1mm) increments down to opt_peak_clip value
+            for i= 1 :-.005 : opt_peak_clip
+                clipped_disp=clipTHS(best_disps(:,k),i,peak_clip_method);
+                clipped_vel=vertcat(diff(clipped_disp)*hist_freq,0);
+                clipped_accel=vertcat(diff(clipped_vel)*hist_freq/9.81,0);
+                % calc clipped spectra
+                clipped_specpoints=Spectra2multi(clipped_accel,damp_value,1/hist_freq,specpoints(:,1));
+                % recalc sepctra errors for clipped signal
+                clipped_points_ok(1:3)=0;
+                for i_err=1 : length(specpoints(:,1))
+                    if specpoints(i_err,9)==1
+                        if clipped_specpoints(i_err)<specpoints(i_err,6)
+                            clipped_points_ok(1)=clipped_points_ok(1)+1;
+                            clipped_points_ok(3)=clipped_points_ok(3)+(((specpoints(i_err,8)-1)^2).^0.5);
+                        end
+                        if clipped_specpoints(i_err)>specpoints(i_err,5)
+                            clipped_points_ok(2)=clipped_points_ok(2)+1;
+                            clipped_points_ok(3)=clipped_points_ok(3)+(((specpoints(i_err,8)-1)^2).^0.5);
+                        end
+                    end
+                end
+
+                % convert to average error/point out of range.
+                if (clipped_points_ok(1)+clipped_points_ok(2)) ~=0
+                    clipped_points_ok(3)=clipped_points_ok(3)/(clipped_points_ok(1)+clipped_points_ok(2));
+                end
+                % is clipped signal still within tollerances?
+                if clipped_points_ok(1)==0
+                    % if so save clipped signal
+                    orig_disp=max(best_disps(:,k))+abs(min(best_disps(:,k)));
+                    best_disps(:,k)=clipped_disp;
+                    clipped_disp=max(best_disps(:,k))+abs(min(best_disps(:,k)));
+                    %disp(['Peak clipping reduced stroke from ' num2str(orig_disp) ' to ' num2str(clipped_disp) 'm']);
+                    % save stats for clipped signal
+                    best_perf(4,k)=clipped_points_ok(1);
+                    best_perf(5,k)=clipped_points_ok(2);
+                    best_perf(3,k)=clipped_points_ok(3);
+                    % save displacment clipping value actually achieved
+                    best_perf(19,k)=i;
+                else
+                    % jump straight out of loop as reached limits of clipping
+                    continue
+                end
+            end
+            % plot clipped spectra
+            hold on;
+            plot(specpoints(:,1),specpoints(:,7),'c');
+            hold off;
+        else
+            % disp(['Peak clipping requested but best match of iteration ' num2str(k) ' has points below allowable limits therefore no clipping done.']);
+            % fill clipping array with zeros to avoid problem later
+             best_perf(19,k)=0;
+        end
+    end
+
+
+    subplot(4,2,[7 8]);
+    plot(real(hist(:,1)),best_disps);
+    title(['Displacement Time History suite ' num2str(k) ' of ' num2str(num_ths) ' generated']);
+    xlabel('Time (secs)');
+    ylabel('Displacement (m)');
+
+
+    if k==num_average_iters
+        calc_time=toc;
+        disp(['Estimated time to completion is ' num2str(calc_time*(num_ths-1)/60/num_average_iters) ' mins i.e '  datestr(now+calc_time*(num_ths-1)/86400/num_average_iters)     ]);
+    end
+
+end
+
+
+[b,a]=butter(7,.5/100,'high');
+% best_disps=filter(b,a,best_disps);
+
+% differentiate to get velocities and accelerations for best time
+% histories pad with zeros to make lengths the same after differentiation
+best_vels=vertcat(diff(best_disps)*hist_freq,zeros(1,num_ths));
+best_accels=vertcat(diff(best_vels)*hist_freq/9.81,zeros(1,num_ths));
+
+figure;
+subplot(3,1,1);
+plot(real(hist(:,1)),best_disps);
+title('Displacement Time History suite');
+xlabel('Time (secs)');
+ylabel('Displacement (m)');
+subplot(3,1,2);
+plot(real(hist(:,1)),best_vels);
+title('Velocity Time History suite');
+xlabel('Time (secs)');
+ylabel('Velocity (m/s)');
+subplot(3,1,3);
+plot(real(hist(:,1)),best_accels);
+title('Acceleration Time History suite');
+xlabel('Time (secs)');
+ylabel('Acceleration (g)');
+
+% results of matching
+for k=1: num_ths
+    best_perf(6,k)=max(best_disps(:,k)*1000);
+    best_perf(7,k)=min(best_disps(:,k)*1000);
+    best_perf(8,k)=max(best_vels(:,k));
+    best_perf(9,k)=min(best_vels(:,k));
+    best_perf(10,k)=max(best_accels(:,k));
+    best_perf(11,k)=min(best_accels(:,k));
+    % peak to peak disp
+    if opt_non_zero_centre==1
+        best_perf(12,k)=best_perf(6,k)-best_perf(7,k);
+    else
+        best_perf(12,k)=2*max(best_perf(6,k),-best_perf(7,k));
+    end
+    % peak velocity
+    best_perf(13,k)=max(best_perf(8,k),-best_perf(9,k));
+    % peak accel
+    best_perf(14,k)=max(best_perf(10,k),-best_perf(11,k));
+end
+min_peak_disp=min(best_perf(12,:));
+min_peak_vel=min(best_perf(13,:));
+min_peak_acc=min(best_perf(14,:));
+% test for within table limits
+best_perf(15,:)=best_perf(12,:)<max_disp*2;
+best_perf(16,:)=best_perf(13,:)<max_vel;
+best_perf(17,:)=best_perf(14,:)<max_accel;
+best_perf(18,:)=best_perf(15,:)+best_perf(16,:)+best_perf(17,:);
+if opt_define_best>1
+ % sort to get those most doable then least points below and by disp/vel/accel as required.
+ % don't worry about points above threashold
+if min_lim == 1
+    best_perf=sortrows(best_perf',[-18 4 12])';
+    str1='displacements';
+elseif min_lim == 2
+    best_perf=sortrows(best_perf',[-18 4 13])';
+    str1='velocities';
+else
+    best_perf=sortrows(best_perf',[-18 4 14])';
+    str1='accelerations';
+end
+else
+% default (i.e opt_define_best=0)
+% sort to get those most doable then least points below, least points above,
+% smallest RMS, and finally by disp/vel/accel as required.
+if min_lim == 1
+    best_perf=sortrows(best_perf',[-18 4 5 3 12])';
+    str1='displacements';
+elseif min_lim == 2
+    best_perf=sortrows(best_perf',[-18 4 5 3 13])';
+    str1='velocities';
+else
+    best_perf=sortrows(best_perf',[-18 4 5 3 14])';
+    str1='accelerations';
+end
+end
+
+disp(' ');
+% Various Warning messages
+% check if best iterations were generally near the end of
+% the matching if so warn that more iterations probably needed
+near_end = mean(best_perf(2,:))/num_cals;
+if near_end > best_limit
+    disp(['WARNING - Best iterations generally occured in last ' num2str(best_limit*100) '% of matching. Probably more iterations needed (i.e. increase num_cals).']);
+    disp(' ');
+end
+% check what percentage of matches were completing within limits
+if sum(best_perf(3,:)==0)/num_ths < .5
+    disp('WARNING - Not many matches were within limits. Probably longer time history needed (i.e. increase hist_strong).');
+    disp(' ');
+end
+
+disp('Summary of best matches (NOT NECESSARILY WITHIN TABLE LIMITS)');
+disp(['Smallest peak-peak displacement found = ' num2str(min_peak_disp) ' mm']);
+disp(['Smallest peak velocity found          = ' num2str(min_peak_vel) ' m/sec']);
+disp(['Smallest peak acceleration found      = ' num2str(min_peak_acc) ' g']);
+
+% get a few stats about the results
+disp(' ');
+disp([num2str(sum(best_perf(3,:)==0)) ' of the ' num2str(num_ths) ' time histories matched within limits defined at every frequency']);
+if opt_peak_clip < 1
+disp(['Displacement clipping was attempted on ' num2str(sum(best_perf(19,:)>0)) ' of the ' num2str(num_ths) ' time histories ']);
+disp(['and was successful in ' num2str(sum(and(best_perf(19,:)>0,best_perf(19,:)<1))) ' cases by up to ' num2str(100-min(best_perf(19,and(best_perf(19,:)>0,best_perf(19,:)<1)))*100) ' %']);
+end
+disp(['On average iteration ' num2str(mean(best_perf(2,:))) ' produced the best match']);
+disp(['Displacement pk-pk ranges found = ' num2str(min(best_perf(12,:))) ' - ' num2str(max(best_perf(12,:))) ' mm']);
+disp(['Velocity ranges found           = ' num2str(min(best_perf(13,:))) ' - ' num2str(max(best_perf(13,:))) ' m/s']);
+disp(['Acceleration ranges found       = ' num2str(min(best_perf(14,:))) ' - ' num2str(max(best_perf(14,:))) ' g']);
+
+if max(best_perf(18,:))<3
+    disp(' ');
+    disp('Sorry but no single record is within all table limits - try modifying matching parameters');
+else
+    disp(' ');
+    disp(['Details of best overall time history found minimising ' str1]);
+    if opt_non_zero_centre==1;
+        disp(['Peak to peak disp. = ' num2str(best_perf(12,1)) 'mm - allowing table to not start in centre position']);
+    else
+        disp(['Peak disp. = ' num2str(best_perf(12,1)/2) 'mm - with table starting in centre position']);
+    end
+    disp(['Peak +ve disp.     = ' num2str(best_perf(6,1)) 'mm']);
+    disp(['Peak -ve disp.     = ' num2str(best_perf(7,1)) 'mm']);
+    disp(['Peak vel.          = ' num2str(best_perf(13,1)) 'm/s']);
+    disp(['Peak acc.          = ' num2str(best_perf(14,1)) 'g']);
+    disp('output_disp, output_vel and output_acc contain final record(s)');
+
+
+    for i=1:num_axes
+        output_disp(:,i)=best_disps(:,best_perf(1,i));
+        output_vel(:,i)=best_vels(:,best_perf(1,i));
+        output_acc(:,i)=best_accels(:,best_perf(1,i));
+        output_spectra(:,i)=Spectra2multi(output_acc(:,i),damp_value,1/hist_freq,specpoints(:,1));
+        full_spec(:,i)=Spectra2multi(output_acc(:,i),damp_value,1/hist_freq,f);
+
+        % save acceleration data records ready for matching on table
+        file = ['output_acc_' num2str(i) '_' num2str(hist_freq) 'Hz.txt'];
+        disp([file ' contains acceleration data ready for matching']);
+        dlmwrite(file,output_acc(:,i), 'newline','pc');
+
+        % save setup data as well
+        file = ['output_acc_' num2str(i) '_' num2str(hist_freq) 'Hz_setupdata.txt'];
+        fid = fopen(file,'w');
+        fprintf(fid,'This file contains the input data used to generate target time history\r\n\r\n');
+        fprintf(fid,'Spectra data used for matching\r\n=============================\r\n');
+        fprintf(fid,'Damping Ratio : %2.3f %%\r\n\r\n', damping);
+        fprintf(fid,'Frequency (Hz), Acceleration (g)\r\n');
+        fprintf(fid,'%3.5f         %3.5f \r\n', corner_points');
+        fprintf(fid,'\r\nMatching ranges:\r\n');
+        fprintf(fid,'%3.3f - %3.3f Hz \r\n', match_ranges');
+        fprintf(fid,'\r\nDetails about this time history\r\n===============================\r\n');
+
+
+            if opt_non_zero_centre==1;
+        fprintf(fid,'Peak to peak disp. = %4.2f mm - allowing table to not start in centre position\r\n', best_perf(12,i));
+    else
+        fprintf(fid,'Peak to peak disp. = %4.2f mm - - with table starting in centre position\r\n', best_perf(12,i))/2;
+    end
+
+        if opt_peak_clip < 1
+            fprintf(fid,'Displacement clipping was attempted for this time history and reduced the displacements by %2.1f %%\r\n', 100-best_perf(19,i)*100);
+            fprintf(fid,'(This may have reduced the quality of the matching slightly)\r\n');
+        end
+        fprintf(fid,'Peak +ve disp.     = %4.2f mm\r\n', best_perf(6,i));
+        fprintf(fid,'Peak -ve disp.     = %4.2f mm\r\n', best_perf(7,i));
+        fprintf(fid,'Peak vel.          = %2.3f m/s\r\n', best_perf(13,i));
+        fprintf(fid,'Peak acc.          = %4.3f g\r\n\r\n', best_perf(14,i));
+        fprintf(fid,'Details about the matching process\r\n==================================\r\n');
+        fprintf(fid,'Summary of best matches (NOT NECESSARILY WITHIN TABLE LIMITS)\r\n');
+        fprintf(fid,'Smallest peak-peak displacement found = %4.2f mm\r\n', min_peak_disp);
+        fprintf(fid,'Smallest peak velocity found          = %4.2f m/sec\r\n', min_peak_vel);
+        fprintf(fid,'Smallest peak acceleration found      = %4.2f g\r\n\r\n', min_peak_acc);
+        fprintf(fid,'%3.0f of the %3.0f time histories matched within limits defined at every frequency\r\n\r\n', sum(best_perf(3,:)==0), num_ths);
+        if opt_peak_clip < 1
+            fprintf(fid,'Displacement clipping was attempted on %3.0f of the %3.0f time histories\r\n', sum(best_perf(19,:)>0), num_ths);
+            fprintf(fid,'and was successful in %3.0f cases by up to %2.1f %%\r\n', sum(and(best_perf(19,:)>0,best_perf(19,:)<1)), 100-min(best_perf(19,and(best_perf(19,:)>0,best_perf(19,:)<1)))*100);
+        end
+        fprintf(fid,'%3.0f of the %3.0f time histories are completely within defined table limits\r\n\r\n', sum(best_perf(18,:)==3), num_ths);
+        fprintf(fid,'On average iteration %3.0f produced the best match\r\n', mean(best_perf(2,:)));
+        fprintf(fid,'Displacement pk-pk ranges found = %4.2f - %4.2f mm\r\n', min(best_perf(12,:)), max(best_perf(12,:)));
+        fprintf(fid,'Velocity ranges found           = %2.3f - %2.3f m/s\r\n', min(best_perf(13,:)), max(best_perf(13,:)));
+        fprintf(fid,'Acceleration ranges found       = %4.3f - %4.3f g\r\n\r\n', min(best_perf(14,:)), max(best_perf(14,:)));
+        fprintf(fid,['Details of best overall time history found minimising ' str1 '\r\n']);
+        fprintf(fid,'Peak to peak disp. = %4.2f mm - allowing table to not start in centre position\r\n', best_perf(12,1));
+        fprintf(fid,'Peak +ve disp.     = %4.2f mm\r\n', best_perf(6,1));
+        fprintf(fid,'Peak -ve disp.     = %4.2f mm\r\n', best_perf(7,1));
+        fprintf(fid,'Peak vel.          = %2.3f m/s\r\n', best_perf(13,1));
+        fprintf(fid,'Peak acc.          = %4.3f g\r\n\r\n', best_perf(14,1));
+        fclose(fid);
+    end
+
+
+
+    figure;
+    subplot(3,1,1);
+    plot(real(hist(:,1)),output_disp);
+    title('Best Displacement Time History(s)');
+    xlabel('Time (secs)');
+    ylabel('Displacement (m)');
+    subplot(3,1,2);
+    plot(real(hist(:,1)),output_vel);
+    title('Best Velocity Time History(s)');
+    xlabel('Time (secs)');
+    ylabel('Velocity (m/s)');
+    subplot(3,1,3);
+    plot(real(hist(:,1)),output_acc);
+    title('Best Acceleration Time History(s)');
+    xlabel('Time (secs)');
+    ylabel('Acceleration (g)');
+
+    %plot spectra for each time history
+    spec_results=figure;
+    if (and(plotspectra_log_x==0,plotspectra_log_y==0))
+        plot_type='plot';
+    elseif (and(plotspectra_log_x==1,plotspectra_log_y==0))
+        % log x plot
+        plot_type='semilogx';
+    elseif (and(plotspectra_log_x==0,plotspectra_log_y==1))
+        % log y plot
+        plot_type='semilogy';
+    else
+        % loglog plot
+        plot_type='loglog';
+    end
+
+    eval([plot_type '(specpoints(plot_linesfrom:plot_linesto,1),specpoints(plot_linesfrom:plot_linesto,3),''k'');'])
+    hold on
+    eval([plot_type '(specpoints(plot_linesfrom:plot_linesto,1),specpoints(plot_linesfrom:plot_linesto,4),''g'');']);
+    eval([plot_type '(specpoints(plot_linesfrom:plot_linesto,1),specpoints(plot_linesfrom:plot_linesto,5),''r'');']);
+    eval([plot_type '(specpoints(plot_linesfrom:plot_linesto,1),specpoints(plot_linesfrom:plot_linesto,6),''r'');']);
+    eval([plot_type '(specpoints(:,1),output_spectra,''m'');']);
+
+    % add markers for each point depending how they were generated
+    for i= 1: length(specpoints(:,3))
+        if specpoints(i,2)==1
+            eval([plot_type '(specpoints(i,1),specpoints(i,3),''^'');']);
+        elseif specpoints(i,2)==2
+            eval([plot_type '(specpoints(i,1),specpoints(i,3),''v'');']);
+        elseif specpoints(i,2)==3
+            eval([plot_type '(specpoints(i,1),specpoints(i,3),''x'');']);
+        else
+            eval([plot_type '(specpoints(i,1),specpoints(i,3),''o'');']);
+        end
+    end
+
+%   title('Spectral Match for best time history(s)');
+    title('Spectral Match for best time history');
+    xlabel('Frequency (Hz)');
+    ylabel('Spectral Acceleration (g)');
+    hold on;
+    % spectra over full fft range
+    plot(f,full_spec,'k');
+
+% fix axes for paper prints
+%    ylim([0 8]);
+%    xlim([0.1 50]);
+
+    % save results of matching TIFF
+    file = ['output_accs_' num2str(hist_freq) 'Hz_matching.tiff'];
+    print('-dtiff', spec_results, file);
+
+
+    disp(' ');
+    disp('Corrolation coefficients between multiple displacement signals. Look at the off diagonal results.');
+    disp(corrcoef(output_disp));
+
+    disp(' ');
+    disp('Working on any optional data processing - May take some time....');
+
+    if opt_spectrogtram == 1
+        for i=1:num_axes
+            figure;
+            spectrogram(output_acc(:,i),64,32,256,hist_freq);
+            title(['Spectrogram of best time history - ' num2str(i)]);
+            xlabel('Frequency (Hz)');
+            ylabel('Time (s)');
+            view(90,-90)
+        end
+    end
+
+    if opt_peakcount == 1
+        for i=1:num_axes
+            % *****************************************************************************************************************
+            % *****************************************************************************************************************
+            % *                        CODE TO COUNT NUMBER IN INPUT ACCELERATION TIME HIST0RY                                *
+            % *        AND COUNT NUMBER HIGH CYCLES (CYCLES WITH MAGNITUDE THRESHOLD OF 70%) IN RESPONSE OF SDOF SYSTEM       *
+            % *  CYCLE COUNTING PROCEDURE is taken from ASTM standard:                                                        *
+            % *  1.	ASTM E1049 - 85. (Reapproved 1997) ' Standard Practices for Cycle Counting in Fatigue Analysis'.         *
+            % *      ASTM International: 100 Barr Harbor, PO Box C700, West Conshohocken, PA 19428.                           *
+            % *  2.	Downing, S.D., and Socie, D.F., 'Simple Rainflow Counting Algorithms'.                                   *
+            % *      International Journal of Fatigue. Vol. 4. No.1, pp. 31-40, 1982.                                         *
+            % *  STUDY was conducted under PEER Lifelines Program Task-408: 'Ground Motions for Earthquake Simulator Testing' *
+            % *  DETAILS are published as PEER report:                                                                        *
+            % *     Takhirov, Fenves, Fujisaki, Clyde. 2004. 'Ground Motions for Earthquake Simulator Qualification of        *
+            % *     Electrical Substation Equipment', Pacific Earthquake Engineering Research Center (PEER),                  *
+            % *     University of California, Berkeley.                                                                       *
+            % *  AUTHOR: Shakhzod M. Takhirov (e-mail: takhirov@peer.berkeley.edu)                                            *
+            % *  AFFILIATION: PEER, University of California at Berkeley                                                      *
+            % *  DATE: 05/05/2004                                                                                             *
+            % *  VERSION: 1.0.1                                                                                               *
+
+            acc=output_acc(:,i);
+            %deltaT=1/hist_freq;
+
+            % block to normalise the acceleration data to 1.0g pga ==> start
+            [maxAcc maxInd] = max(abs(acc));  % maximum value and its index
+            pga = acc(maxInd); % peak ground acceleration value
+            acc = acc/maxAcc; % normalize the signal
+
+            % block to make sure that acceleration is an one row array ==> start
+            [nx ny] = size(acc);
+            if nx > ny
+                acc = acc';
+            end
+            acc = [0.0 acc 0.0];
+            nPoints = length(acc);
+
+            % Count number of high cycles in the input strong motion ==> start
+            [indexIn,valueIn] =  peakdet(acc, 1e-10);  % find peaks and valleys
+            [magnitudeEdgesIn,nCyclesIn] = countASTMsimpFinal(valueIn); % count cycles
+            hCyclesIn = sum(nCyclesIn(7:10)); % count only high cycles with 70% threshold
+            disp(['No high cycles for input motion ' num2str(i) ' = ' num2str(hCyclesIn)]);
+
+            % Count number of high cycles in the response of SDOF system
+            for j = 1:50:length(specpoints(:,1));
+                freq_cycl(j) = specpoints(j,1);
+                [accOut]=SDOF_resp(acc,damp_value,1/hist_freq,freq_cycl(j)); % compute SDOF system responce
+                accOut = accOut/max(abs(accOut)); % normalized the output
+                [index,value] = peakdet(accOut, 1e-10);  % find peaks and valleys
+                figure;
+                plot(value);
+                [magnitudeEdges,nCycles] = countASTMsimpFinal(value); % count full cycles
+                nCyclesOut(j) = sum(nCycles(7:10)); % count only high cycles with 70% threshold
+            end
+
+            % plot in log-log scale
+            figure;
+            loglog(freq_cycl, nCyclesOut,'r');
+            grid;
+            title(['Number of high cycles (70% threshold) in SDOF system response for time history - ' num2str(i)]);
+            ylabel('Number of high cycles');
+            xlabel('Frequency, Hz');
+
+        end
+    end
+
+    if opt_eqparam == 1
+        for i=1:num_axes
+            disp(' ');
+            disp(['Time history parameters for time history - ' num2str(i)]);
+            % start at beginning of record and look for first point > 25% of
+            % maximum
+            for j=1:length(output_acc(:,1))
+                if abs(output_acc(j,1))/max(abs(output_acc(:,1))) > 0.25
+                    startloc=j;
+                    break;
+                end
+            end
+            % start from end of record and look for backwards for first point > 25% of
+            % maximum
+            for j=length(output_acc(:,1)):-1:1
+                if abs(output_acc(j,1))/max(abs(output_acc(:,1))) > 0.25
+                    endloc=j;
+                    break;
+                end
+            end
+            strongduration=hist(endloc,1)-hist(startloc,1);
+            disp(['Strong motion duration = ' num2str(strongduration) ' secs (for IEE693-205 p51 must be > 20sec)']);
+            disp(['PGA = ' num2str(max(abs(output_acc(:,i)))) ' g']);
+            disp(['PGV = ' num2str(max(abs(output_vel(:,i)))) ' m/s']);
+            disp(['PGD = ' num2str(max(abs(output_disp(:,i)))) ' m']);
+
+            rel_cumulative_energy=cumtrapz(hist(:,1),output_acc(:,i).^2)/trapz(hist(:,1),output_acc(:,i).^2);
+            for j=1:length(rel_cumulative_energy)
+                if  rel_cumulative_energy(j) < 0.05
+                    t_loc5=j;
+                end
+                if  rel_cumulative_energy(j) < 0.25
+                    t_loc25=j;
+                end
+                if  rel_cumulative_energy(j) < 0.75
+                    t_loc75=j;
+                end
+                if  rel_cumulative_energy(j) < 0.95
+                    t_loc95=j;
+                end
+            end
+            strongpartratio=(t_loc75-t_loc25)/(t_loc95-t_loc5);
+            disp(['Strong part ratio = ' num2str(strongpartratio*100) '% (for IEE693-205 p51 must be > 30%)']);
+            cumulative_vel=trapz(hist(:,1),abs(output_acc(:,i)));
+            disp(['CAV (Cumulative Absolute Velocity) = ' num2str(cumulative_vel) ' m/s']);
+            rms_accel=(1/(hist(t_loc95,1)-hist(t_loc5,1))*trapz(hist(t_loc5:t_loc95,1),output_acc(t_loc5:t_loc95,i).^2))^0.5;
+            disp(['RMS acceleration = ' num2str(rms_accel) ' m/s2']);
+            disp(['Average Intensity = ' num2str(rms_accel^2) '? formula ?  m/s2 (Kramer 1996))']);
+            arias_intensity=pi/2/9.81*trapz(hist(:,1),output_acc(:,i).^2);
+            disp(['Arias Intensity = ' num2str(arias_intensity) ' m/s (Arias 1970))']);
+
+            disp(['EPA (Effecive peak acceleration) = ' ' m/s2']);
+            disp(['EPV (Effecive peak velocity) = ' ' m/s']);
+            disp(['SI  (Response Spectrum Intensity) = ' ' m/s (Housner 1959)']);
+            disp(['ASI (Acceleration Spectrum Intensity) = ' ' m/s (Von Thun et al. 1988)']);
+
+        end
+    end
+end
+% need to close parallel processors here if used
+
+
+Matching Software Version 10.0
+Analysis started 20-Jul-2022 16:19:17
+Time history frequency must be > 10 times max spectra frequency (100Hz)
+Time history frequency has been adjusted from 200Hz to 1000Hz
+Increasing number of time histories from 3 to 10 to cope with number of axes required
+Unrecognized function or variable 'Spectra2multi'.
+
+>>
