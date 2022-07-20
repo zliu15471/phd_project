@@ -1,6 +1,4 @@
-Warning: the font "Times" is not available, so "Lucida Bright" has been substituted, but may have unexpected appearance or behavor. Re-enable the "Times" font to remove this warning.
-Warning: the font "Times" is not available, so "Lucida Bright" has been substituted, but may have unexpected appearance or behavor. Re-enable the "Times" font to remove this warning.
->> % Response Spectra Matching Version 10 by AJC 25/3/2013
+>> % Response Spectra Matching Version 10 by AJC 25/3/2013 (CREWE A 2020. Time history generation software [Matlab code] (In-house software-University of Bristol).)
 close all;
 clear all;
 
