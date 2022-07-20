@@ -1,0 +1,69 @@
+
+>> % by AJC 25/3/2013 (CREWE A 2020. Time history generation software [Matlab code] (In-house software-University of Bristol).)
+
+
+function [s]=Spectra2(a,xi,dt,f)
+
+% SPECTRA: Compute seismic response spectra for elastic design.
+% Syntax: s=spectra2(a,xi,dt,f);
+%
+% H Carlsson, Lund Institute of Technology, Modified by Max Ratcliffe, 10/7/98
+%
+% a  - acceleration time history at equal time step, dim(a)= ntimes x 1
+% xi - damping ratio, dim(xi)= 1 x 1
+% dt - time step, dim(dt)= 1 x 1
+% f  - frequency vector, dim(f)= nfreq x 1
+%
+% s  - complex response matrix
+
+
+
+
+% Convert frequency vector to a column, if necessary
+
+if size(f,2)>size(f,1)
+   f=f';
+end
+
+[np nr]=size(f);
+
+s(np)=0;
+for i=1:np
+  r=sqrt(1-xi*xi);
+  w=2*pi*f(i);
+  wt=w*dt;
+  e=exp(-xi*wt);
+  c1=2*e*cos(r*wt);
+  c2=e*e;
+  c3=e/r/wt*sin(r*wt);
+  c4=[-c3 2*c3 -c3];
+  c5=[1 -c1 c2];
+  y=filter(c4,c5,a);
+  % get max relative acceleration
+  s(i)=max(abs(y+a));
+end
+
+s=s';
+%--------------------------end--------------------------------
+
+% From Smallwood "AN IMPROVED RECURSIVE FORMULA FOR CALCULATING SHOCK RESPONSE
+% SPECTRA"
+% y(n) = b0.x(n) + b1.x(n-1) + b2.x(n-2)
+%                - a1.y(n-1) - a2.y(n-2)
+%
+% Using absolute acceleration model
+% wn = 2*pi*f(i)
+% wd = wn*sqrt(1-xi^xi)
+% E = exp(-xi*wn*dt)
+% K = dt*wd
+% C = E*cos(K)
+% S = E*sin(K)
+% S' = E*sin(K)/K
+% b0 = 1-S'
+% b1 = 2(S'-C)
+% b2 = E^2-S'
+% a1 = -2C
+% a2 = E^2
+%
+% y(n) = (1-S').x(n) + (E^2-S').x(n-1) + (E^2-S').x(n-2)
+%      - -2E*cos(dt*wd).y(n-1) - (exp(-xi*wn*dt))^2.y(n-2)
